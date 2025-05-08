@@ -23,6 +23,9 @@ const PORT = 5000;
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+
 
 // Routes
 app.get("/api/bytes-usage", getBytesUsage);
@@ -35,10 +38,11 @@ app.post("/api/register", newUser);
 app.get("/api/user/:userId", getUserData);
 app.get("/api/users", getAllUsers);
 
-app.get("/api/rules/:userId", getUserRules);
+app.get("/api/blocked-domains/:userId", getUserRules);
 app.post("/api/rules/add", addUserRule);
 app.delete("/api/rules/delete", deleteUserRule);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+

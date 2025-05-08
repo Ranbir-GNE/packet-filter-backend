@@ -27,7 +27,20 @@ const userLogin = async (req, res) => {
 
 // Register New User
 const newUser = async (req, res) => {
+  // Check if request body exists
+  console.log("Request recieved:", req.body);
+  if (!req.body) {
+    return res.status(400).json({ message: "Request body is missing" });
+  }
+
   const { username, email, password, confirmPassword } = req.body;
+
+  // Validate required fields
+  if (!username || !email || !password || !confirmPassword) {
+    return res.status(400).json({
+      message: "All fields are required (username, email, password, confirmPassword)"
+    });
+  }
 
   if (password !== confirmPassword) {
     return res.status(400).json({ message: "Passwords do not match" });
@@ -75,11 +88,12 @@ const getUserData = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
 const getAllUsers = async (req, res) => {
   try {
-    const [users] = await db.query("SELECT id, username, email FROM users");
+    const [client] = await db.query("SELECT user_id, ip_address, name FROM clients_table");
 
-    res.status(200).json({ users });
+    res.status(200).json({ client });
   } catch (error) {
     console.error("Error fetching all users:", error);
     res.status(500).json({ message: "Internal server error" });
