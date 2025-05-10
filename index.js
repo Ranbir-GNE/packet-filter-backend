@@ -1,23 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-const {
-  getBytesUsage,
-  getTotalBytes,
-  getTotalBytesByHostname,
-  getAllEntries,
-} = require("./controllers/networkController");
-const {
-  userLogin,
-  newUser,
-  getUserData,
-  getAllUsers,
-} = require("./controllers/userController");
-
-const {
-  getUserRules,
-  deleteUserRule,
-  addUserRule,
-} = require("./controllers/rulesController");
 
 const PORT = 5000;
 const app = express();
@@ -25,24 +7,24 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const loggerMiddleware = require("./utils/logger");
 
-
-// Routes
-app.get("/api/bytes-usage", getBytesUsage);
-app.get("/api/total-bytes", getTotalBytes);
-app.get("/api/total-bytes-hostname", getTotalBytesByHostname);
-app.get("/api/all-entries", getAllEntries);
-
-app.post("/api/login", userLogin);
-app.post("/api/register", newUser);
-app.get("/api/user/:userId", getUserData);
-app.get("/api/users", getAllUsers);
-
-app.get("/api/blocked-domains/:userId", getUserRules);
-app.post("/api/rules/add", addUserRule);
-app.delete("/api/rules/delete", deleteUserRule);
+const userRoutes = require("./routes/userRoutes");
+const networkRoutes = require("./routes/networkRoutes");
+const rulesRoutes = require("./routes/rulesRoutes");
+const clientRoutes = require("./routes/clientRoutes");
+const planRoutes = require("./routes/plansRoutes");
+const blockedDomainsRoutes = require("./routes/domainsRoutes");
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
+}).on("error", (error) => {
+  console.error(error);
 });
 
+app.use("/api/users", loggerMiddleware, userRoutes);
+app.use("/api/network", loggerMiddleware, networkRoutes);
+app.use("/api/rules", loggerMiddleware, rulesRoutes);
+app.use("/api/clients", loggerMiddleware, clientRoutes);
+app.use("/api/plans", loggerMiddleware, planRoutes);
+app.use("/api/blocked-domains", loggerMiddleware, blockedDomainsRoutes);
