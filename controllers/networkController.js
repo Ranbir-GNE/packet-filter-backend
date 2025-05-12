@@ -2,7 +2,7 @@ const db = require("../utils/dbConnect"); // Import the promise-based database c
 
 // Controller for fetching bytes usage
 const getBytesUsage = async (req, res) => {
-  const query = "SELECT source_ip, hostname, downloaded FROM bytes_usage";
+  const query = "SELECT * FROM bytes_usage WHERE hostname!=' '";
   try {
     const [results] = await db.query(query);
     res.json(results);
@@ -38,7 +38,7 @@ const getTotalBytesByHostname = async (req, res) => {
       hostname, 
       SUM(downloaded) AS total_downloaded, 
       SUM(uploaded) AS total_uploaded 
-    FROM bytes_usage 
+    FROM bytes_usage WHERE hostname!=' '
     GROUP BY hostname
   `;
   try {
