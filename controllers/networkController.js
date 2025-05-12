@@ -2,7 +2,10 @@ const db = require("../utils/dbConnect"); // Import the promise-based database c
 
 // Controller for fetching bytes usage
 const getBytesUsage = async (req, res) => {
-  const query = "SELECT * FROM bytes_usage WHERE hostname!=' '";
+  const query = `SELECT c.name AS source_ip, b.hostname,b.downloaded,b.uploaded,date FROM
+bytes_usage AS b
+JOIN clients_table AS c ON c.ip_address COLLATE utf8mb4_unicode_ci = b.source_ip
+WHERE b.hostname!=' '`;
   try {
     const [results] = await db.query(query);
     res.json(results);
