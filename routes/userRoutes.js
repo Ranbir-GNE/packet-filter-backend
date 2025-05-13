@@ -6,10 +6,9 @@ const {
     getAllUsers,
 } = require("../controllers/userController");
 const router = express.Router();
-
-router.post("/api/login", userLogin);
-router.post("/api/register", newUser);
-router.get("/api/user/:userId", getUserData);
-router.get("/api/users", getAllUsers);
+router.post("/login", userLogin);
+router.post("/register", newUser);
+router.get("/:userId", getUserData);
+router.get("/users", getAllUsers);
 
 module.exports = router;

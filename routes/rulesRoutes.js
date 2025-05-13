@@ -8,6 +8,6 @@ const router = express.Router();
 router.post("/create", createRule);
 router.get("/all", getAllRules);
 router.get("/:user_id", getUserRules);
-router.delete("/delete/:rule_id", deleteRule);
+router.delete("/:rule_id", deleteRule);
 
 module.exports = router;

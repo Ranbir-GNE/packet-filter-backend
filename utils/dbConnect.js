@@ -1,7 +1,7 @@
 const mysql = require("mysql2/promise");
 const dotenv = require("dotenv");
 
-dotenv.config();
+dotenv.config({ path: '/home/user/major-project/packet-filter-backend/.env' });
 
 const db = mysql.createPool({
   host: process.env.HOST,
